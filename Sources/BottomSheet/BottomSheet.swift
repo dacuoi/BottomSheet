@@ -14,6 +14,7 @@ public struct BottomSheet<HContent: View, MContent: View, V: View>: View {
     // Views
     private let view: V
     private let headerContent: HContent?
+    private let popoverContent: HContent?
     private let mainContent: MContent
     
     private let switchablePositions: [BottomSheetPosition]
@@ -30,6 +31,7 @@ public struct BottomSheet<HContent: View, MContent: View, V: View>: View {
             BottomSheetView(
                 bottomSheetPosition: self.$bottomSheetPosition,
                 headerContent: self.headerContent,
+                popoverContent: self.popoverContent,
                 mainContent: self.mainContent,
                 switchablePositions: self.switchablePositions,
                 configuration: self.configuration
@@ -48,6 +50,24 @@ public struct BottomSheet<HContent: View, MContent: View, V: View>: View {
         self._bottomSheetPosition = bottomSheetPosition
         self.switchablePositions = switchablePositions
         self.headerContent = headerContent
+        self.popoverContent = nil
+        self.mainContent = mainContent
+        self.view = view
+    }
+    
+    // Initializers
+    internal init(
+        bottomSheetPosition: Binding<BottomSheetPosition>,
+        switchablePositions: [BottomSheetPosition],
+        headerContent: HContent?,
+        popoverContent: HContent?,
+        mainContent: MContent,
+        view: V
+    ) {
+        self._bottomSheetPosition = bottomSheetPosition
+        self.switchablePositions = switchablePositions
+        self.headerContent = headerContent
+        self.popoverContent = popoverContent
         self.mainContent = mainContent
         self.view = view
     }
@@ -72,6 +92,9 @@ public struct BottomSheet<HContent: View, MContent: View, V: View>: View {
                 } else {
                     return nil
                 }
+            }(),
+            popoverContent: {
+                return nil
             }(),
             mainContent: content,
             view: view
@@ -103,6 +126,27 @@ public extension View {
             bottomSheetPosition: bottomSheetPosition,
             switchablePositions: switchablePositions,
             headerContent: headerContent(),
+            mainContent: mainContent(),
+            view: self
+        )
+    }
+    
+    func bottomSheet<HContent: View, MContent: View>(
+        bottomSheetPosition: Binding<BottomSheetPosition>,
+        switchablePositions: [BottomSheetPosition],
+        @ViewBuilder headerContent: () -> HContent? = {
+            return nil
+        },
+        @ViewBuilder popoverContent: () -> HContent? = {
+            return nil
+        },
+        @ViewBuilder mainContent: () -> MContent
+    ) -> BottomSheet<HContent, MContent, Self> {
+        BottomSheet(
+            bottomSheetPosition: bottomSheetPosition,
+            switchablePositions: switchablePositions,
+            headerContent: headerContent(),
+            popoverContent: popoverContent(),
             mainContent: mainContent(),
             view: self
         )

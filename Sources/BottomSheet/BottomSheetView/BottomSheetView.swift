@@ -8,9 +8,7 @@
 import SwiftUI
 
 internal struct BottomSheetView<HContent: View, MContent: View>: View {
-    @GestureState var isDragging: Bool = false
-    @State var lastDragValue: DragGesture.Value?
-
+    
     // For iPhone landscape and iPad support
 #if !os(macOS)
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -36,6 +34,7 @@ internal struct BottomSheetView<HContent: View, MContent: View>: View {
     
     // Views
     let headerContent: HContent?
+    let popoverContent: HContent?
     let mainContent: MContent
     
     let switchablePositions: [BottomSheetPosition]
@@ -58,30 +57,11 @@ internal struct BottomSheetView<HContent: View, MContent: View>: View {
                     // Full screen background for aligning and used by `backgroundBlur` and `tapToDismiss`
                     self.fullScreenBackground(with: geometry)
                     
+                    self.popoverContent
                     // The BottomSheet itself
                     self.bottomSheet(with: geometry)
                 }
             }
-            // Handle drag ended or cancelled
-            // Drag cancellation can happen e.g. when user drags from bottom of the screen to show app switcher
-            .valueChanged(value: isDragging, onChange: { isDragging in
-                if lastDragValue != nil && !isDragging {
-                    // Perform custom onEnded action
-                    self.configuration.onDragEnded(lastDragValue!)
-                    
-                    // Switch the position based on the translation and screen height
-                    self.dragPositionSwitch(
-                        with: geometry,
-                        value: lastDragValue!
-                    )
-                    
-                    // Reset translation and last drag value, because the dragging ended
-                    self.translation = 0
-                    self.lastDragValue = nil
-                    // Dismiss the keyboard after drag
-                    self.endEditing()
-                }
-            })
             // Animate value changes
 #if !os(macOS)
             .animation(
