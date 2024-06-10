@@ -217,7 +217,9 @@ internal extension BottomSheetView {
     // For `tapToDismiss`
     func tapToDismissAction() {
         // Only dismiss sheet when `tapToDismiss` is enabled
-        if self.configuration.isTapToDismissEnabled {
+        if self.popoverContent != nil {
+            self.configuration.onNeedDismissPopover()
+        } else {
             self.closeSheet()
         }
     }
