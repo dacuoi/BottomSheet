@@ -36,4 +36,9 @@ public extension BottomSheet {
         self.configuration.backgroundBlurMaterial = material
         return self
     }
+    
+    func backgroundBlurCustom(_ color: Color) -> BottomSheet {
+        self.configuration.backgroundBlurCustom = color
+        return self
+    }
 }

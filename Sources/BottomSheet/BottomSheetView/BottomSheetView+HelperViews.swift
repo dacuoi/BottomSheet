@@ -22,6 +22,7 @@ internal extension BottomSheetView {
                 maxWidth: .infinity,
                 maxHeight: .infinity
             )
+            .background(self.configuration.backgroundBlurCustom)
             .edgesIgnoringSafeArea(.all)
         // Make the background tap-able for `tapToDismiss`
             .contentShape(Rectangle())
