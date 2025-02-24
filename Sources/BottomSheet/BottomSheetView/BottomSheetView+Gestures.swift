@@ -9,7 +9,8 @@ import SwiftUI
 
 internal extension BottomSheetView {
     func dragGesture(with geometry: GeometryProxy) -> some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 20,
+                    coordinateSpace: .global)
             .onChanged { value in
                 // Perform custom onChanged action
                 self.configuration.onDragChanged(value)
