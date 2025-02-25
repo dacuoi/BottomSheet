@@ -27,4 +27,9 @@ public extension BottomSheet {
         self.configuration.onNeedDismissPopover = perform
         return self
     }
+    
+    func onDismissGesture(_ perform: @escaping () -> Void) -> BottomSheet {
+        self.configuration.onDismissGesture = perform
+        return self
+    }
 }

@@ -58,6 +58,7 @@ internal class BottomSheetConfiguration: Equatable {
     var isTapToDismissEnabled: Bool = false
     var onDismiss: () -> Void = {}
     var onNeedDismissPopover: () -> Void = {}
+    var onDismissGesture: (() -> Void)?
     var onDragEnded: (DragGesture.Value) -> Void = { _ in }
     var onDragChanged: (DragGesture.Value) -> Void = { _ in }
     var threshold: Double = 0.3
